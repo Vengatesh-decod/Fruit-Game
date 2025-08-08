@@ -1,0 +1,12 @@
+# ninja log v5
+27	4722	7763601314356064	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	d24c63edea1516bd
+41	4916	7763601314745016	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	ec85bd77aeac6df
+0	4918	7763601316012173	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	faaa8ddda318b270
+20	4920	7763601315488274	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	3c275eed945eb4ce
+57	4922	7763601316595705	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	6c9d4734ab32d293
+48	5350	7763601321568278	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	5000cb65472dc7af
+34	5377	7763601321917344	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	c7b577a14762343a
+4730	5465	7763601322866868	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	4e484b0796d76235
+13	5480	7763601322906764	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	cf77dd73454aad1a
+5466	5598	7763601324199759	N:/Vengateshwaran Workspace/Project File/FruitDuel/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1n5k6r45/obj/arm64-v8a/libswappywrapper.so	64f7bae98e54a402
+5480	5603	7763601324209731	N:/Vengateshwaran Workspace/Project File/FruitDuel/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1n5k6r45/obj/arm64-v8a/libgame.so	28ae2f1ac79d9af8

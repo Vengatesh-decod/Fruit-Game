@@ -1,0 +1,8 @@
+N:/Vengateshwaran Workspace/Project File/FruitDuel/.utmp/RelWithDebInfo/1n5k6r45/arm64-v8a/CMakeFiles/edit_cache.dir
+N:/Vengateshwaran Workspace/Project File/FruitDuel/.utmp/RelWithDebInfo/1n5k6r45/arm64-v8a/CMakeFiles/rebuild_cache.dir
+N:/Vengateshwaran Workspace/Project File/FruitDuel/.utmp/RelWithDebInfo/1n5k6r45/arm64-v8a/GameActivity/CMakeFiles/game.dir
+N:/Vengateshwaran Workspace/Project File/FruitDuel/.utmp/RelWithDebInfo/1n5k6r45/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+N:/Vengateshwaran Workspace/Project File/FruitDuel/.utmp/RelWithDebInfo/1n5k6r45/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
+N:/Vengateshwaran Workspace/Project File/FruitDuel/.utmp/RelWithDebInfo/1n5k6r45/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
+N:/Vengateshwaran Workspace/Project File/FruitDuel/.utmp/RelWithDebInfo/1n5k6r45/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
+N:/Vengateshwaran Workspace/Project File/FruitDuel/.utmp/RelWithDebInfo/1n5k6r45/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir
