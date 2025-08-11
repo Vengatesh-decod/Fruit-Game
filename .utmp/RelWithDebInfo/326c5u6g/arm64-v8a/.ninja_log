@@ -1,0 +1,23 @@
+# ninja log v5
+5	1693	7766139616996735	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	957c6c5bc865d924
+59	301	7766139603079986	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	7b1fc90477514915
+301	407	7766139604157918	D:/Vengatesh Workspace/Fruit-Game/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/326c5u6g/obj/arm64-v8a/libswappywrapper.so	de60666f77e1b023
+29	1321	7766139613177958	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	d2d90597a13c696b
+16	1359	7766139613508619	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	b7f5a0cdb2981a85
+11	1386	7766139613790061	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	76f95f4b32274c5
+1693	1782	7766139617879104	D:/Vengatesh Workspace/Fruit-Game/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/326c5u6g/obj/arm64-v8a/libgame.so	8e91ad0172dd441a
+51	1538	7766139615458656	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	9a803657abf20d12
+23	1485	7766139614940538	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	ae0d0d783242a23a
+43	1383	7766139613805145	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	ced7c5d44401b977
+35	1610	7766139616187415	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	e3c6c627fc05ed19
+54	220	7766147732392437	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	7b1fc90477514915
+220	331	7766147733490306	D:/Vengatesh Workspace/Fruit-Game/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/326c5u6g/obj/arm64-v8a/libswappywrapper.so	de60666f77e1b023
+11	986	7766147740033310	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	b7f5a0cdb2981a85
+38	998	7766147740154214	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	d2d90597a13c696b
+31	1025	7766147740422439	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	ced7c5d44401b977
+16	1031	7766147740488011	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	76f95f4b32274c5
+21	1078	7766147740936337	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	ae0d0d783242a23a
+46	1128	7766147741478583	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	9a803657abf20d12
+26	1236	7766147742509890	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	e3c6c627fc05ed19
+5	1348	7766147743588074	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	957c6c5bc865d924
+1348	1442	7766147744569631	D:/Vengatesh Workspace/Fruit-Game/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/326c5u6g/obj/arm64-v8a/libgame.so	8e91ad0172dd441a

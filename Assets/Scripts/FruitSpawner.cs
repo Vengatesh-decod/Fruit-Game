@@ -1,20 +1,20 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class FruitSpawner : MonoBehaviour
 {
     [Header("Camera / Dynamic Bounds")]
-    public Camera cam;                 // Assign your main camera, or it will auto-grab Camera.main
-    public float screenMarginX = 0.25f;   // world-units to keep fruits from spawning clipped at edges
-    public float spawnBelowScreen = 0.4f; // how far below the bottom edge to spawn (world-units)
+    public Camera cam;
+    public float screenMarginX = 0.25f;
+    public float spawnBelowScreen = 0.4f;
 
-    // ---- Your existing fields ----
     [Header("Prefabs")]
     public GameObject[] fruitPrefabs;
     public GameObject bombPrefab;
 
     [Header("Spawn Area (computed)")]
-    [SerializeField] public float xRange = 2.5f;  // will be overwritten by RecalculateBounds()
+    [SerializeField] public float xRange = 2.5f;
     [SerializeField] public float yPosition = -6f;
 
     [Header("Timing")]
@@ -26,14 +26,14 @@ public class FruitSpawner : MonoBehaviour
 
     [Header("Launch Physics")]
     public Vector2 sideForceX = new Vector2(-1.2f, 1.2f);
-    public Vector2 upForceY  = new Vector2(11f, 16f);
-    public Vector2 torqueZ   = new Vector2(-220f, 220f);
+    public Vector2 upForceY = new Vector2(11f, 16f);
+    public Vector2 torqueZ = new Vector2(-220f, 220f);
 
     [Header("Misc")]
     public bool randomizeRotationOnSpawn = true;
 
     [Header("Series (Burst)")]
-    [Range(0f,1f)] public float seriesChance = 0.25f;
+    [Range(0f, 1f)] public float seriesChance = 0.25f;
     public Vector2Int seriesCountRange = new Vector2Int(3, 5);
     public int seriesBonus = 5;
     public bool allowBombInSeries = false;
@@ -41,12 +41,14 @@ public class FruitSpawner : MonoBehaviour
     public enum SeriesPattern { RandomX, Line, Fan }
     public SeriesPattern pattern = SeriesPattern.RandomX;
     public float lineSpacing = 1.2f;
-    public float fanSpread  = 60f;
+    public float fanSpread = 60f;
 
     private int _nextSeriesId = 1;
-
-    // Tracking for resolution/orientation changes
     private int _lastScreenW, _lastScreenH;
+    private bool _isStopped = false;
+
+    // NEW: Track all spawned objects
+    private List<GameObject> spawnedObjects = new List<GameObject>();
 
     private void Awake()
     {
@@ -63,7 +65,6 @@ public class FruitSpawner : MonoBehaviour
 
     private void Update()
     {
-        // Recalculate if resolution/aspect changes (e.g., orientation change)
         if (_lastScreenW != Screen.width || _lastScreenH != Screen.height)
         {
             _lastScreenW = Screen.width;
@@ -77,14 +78,12 @@ public class FruitSpawner : MonoBehaviour
         StartCoroutine(SpawnLoop());
     }
 
-    // --- Dynamic bounds calculation ---
     private void RecalculateBounds()
     {
         if (cam == null) return;
 
         if (cam.orthographic)
         {
-            // Orthographic: easy math using orthographicSize and aspect
             float halfH = cam.orthographicSize;
             float halfW = halfH * cam.aspect;
 
@@ -93,11 +92,10 @@ public class FruitSpawner : MonoBehaviour
         }
         else
         {
-            // Perspective: compute world positions at the spawner's Z plane
             float zDist = Mathf.Abs((transform.position - cam.transform.position).z);
-            Vector3 worldLeftBottom  = cam.ViewportToWorldPoint(new Vector3(0f, 0f, zDist));
+            Vector3 worldLeftBottom = cam.ViewportToWorldPoint(new Vector3(0f, 0f, zDist));
             Vector3 worldRightBottom = cam.ViewportToWorldPoint(new Vector3(1f, 0f, zDist));
-            Vector3 worldCenterBottom= cam.ViewportToWorldPoint(new Vector3(0.5f, 0f, zDist));
+            Vector3 worldCenterBottom = cam.ViewportToWorldPoint(new Vector3(0.5f, 0f, zDist));
 
             float halfWidth = (worldRightBottom.x - worldLeftBottom.x) * 0.5f;
             xRange = Mathf.Max(0.05f, halfWidth - screenMarginX);
@@ -109,19 +107,27 @@ public class FruitSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        while (true)
+        while (!_isStopped)
         {
             if (Random.value < seriesChance)
                 SpawnSeries();
             else
                 SpawnOne();
 
-            yield return new WaitForSeconds(Random.Range(minInterval, maxInterval));
+            float wait = Random.Range(minInterval, maxInterval);
+            float elapsed = 0f;
+            while (elapsed < wait && !_isStopped)
+            {
+                yield return null;
+                elapsed += Time.deltaTime;
+            }
         }
     }
 
     private void SpawnOne()
     {
+        if (_isStopped) return;
+
         GameObject prefab = PickSinglePrefab();
         if (prefab == null) return;
 
@@ -129,6 +135,8 @@ public class FruitSpawner : MonoBehaviour
         Quaternion rot = randomizeRotationOnSpawn ? Quaternion.Euler(0, 0, Random.Range(0f, 360f)) : Quaternion.identity;
 
         GameObject obj = Instantiate(prefab, spawnPos, rot);
+        spawnedObjects.Add(obj); // Track it
+
         var fruit = obj.GetComponent<Fruit>();
         if (fruit != null) fruit.seriesId = -1;
 
@@ -137,11 +145,13 @@ public class FruitSpawner : MonoBehaviour
 
     private void SpawnSeries()
     {
+        if (_isStopped) return;
+
         int count = Random.Range(seriesCountRange.x, seriesCountRange.y + 1);
         int id = _nextSeriesId++;
         ComboSeriesManager.Instance?.StartSeries(id, count, seriesBonus);
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < count && !_isStopped; i++)
         {
             GameObject prefab = PickSeriesPrefab();
             if (prefab == null) continue;
@@ -150,6 +160,7 @@ public class FruitSpawner : MonoBehaviour
             Quaternion rot = randomizeRotationOnSpawn ? Quaternion.Euler(0, 0, Random.Range(0f, 360f)) : Quaternion.identity;
 
             GameObject obj = Instantiate(prefab, spawnPos, rot);
+            spawnedObjects.Add(obj); // Track it
 
             var fruit = obj.GetComponent<Fruit>();
             if (fruit != null) fruit.seriesId = id;
@@ -158,7 +169,6 @@ public class FruitSpawner : MonoBehaviour
         }
     }
 
-    // --- Helpers ---
     private GameObject PickSinglePrefab()
     {
         if (bombPrefab != null && Random.value < bombChance) return bombPrefab;
@@ -203,10 +213,10 @@ public class FruitSpawner : MonoBehaviour
     {
         if (obj == null) return;
         var rb = obj.GetComponent<Rigidbody2D>();
-        if (rb == null) { Debug.LogWarning($"FruitSpawner: '{obj.name}' has no Rigidbody2D."); return; }
+        if (rb == null) return;
 
         Vector2 impulse = new Vector2(Random.Range(sideForceX.x, sideForceX.y),
-                                      Random.Range(upForceY.x,  upForceY.y));
+                                      Random.Range(upForceY.x, upForceY.y));
 
         if (pattern == SeriesPattern.Fan && total > 1)
         {
@@ -221,23 +231,19 @@ public class FruitSpawner : MonoBehaviour
         rb.AddTorque(Random.Range(torqueZ.x, torqueZ.y), ForceMode2D.Impulse);
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
+    public void StopSpawning()
     {
-        if (cam == null) cam = Camera.main;
-        RecalculateBounds();
+        if (_isStopped) return;
+        _isStopped = true;
 
-        // draw spawn line
-        Gizmos.color = Color.green;
-        Vector3 left = new Vector3(-xRange, yPosition, 0f);
-        Vector3 right = new Vector3( xRange, yPosition, 0f);
-        Gizmos.DrawLine(left, right);
-        Gizmos.DrawSphere(left, 0.05f);
-        Gizmos.DrawSphere(right, 0.05f);
+        StopAllCoroutines();
+
+        // Destroy all tracked spawned objects
+        foreach (var obj in spawnedObjects)
+        {
+            if (obj != null)
+                Destroy(obj);
+        }
+        spawnedObjects.Clear();
     }
-#endif
 }
-
-
-
-

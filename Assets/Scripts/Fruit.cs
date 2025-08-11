@@ -31,6 +31,10 @@ public class Fruit : MonoBehaviour
         // Auto destroy when fruit falls below destroyY
         if (!isSliced && transform.position.y < destroyY)
         {
+            // Count as a MISS only for normal fruits (ignore bombs)
+            if (!isBomb)
+                MissTracker.Instance?.RegisterMiss();
+
             if (seriesId >= 0)
                 ComboSeriesManager.Instance?.RegisterMiss(seriesId);
 
@@ -43,25 +47,26 @@ public class Fruit : MonoBehaviour
         if (isSliced) return;
         isSliced = true;
 
-        // Play generic slice SFX if you want that 'cut' sound on both fruit/bomb
+        // Slice SFX (generic)
         if (sliceSound != null)
             AudioManager.Instance?.PlaySFX("slice", false);
 
-       if (isBomb)
-{
-    Blade.LockSlicing(); // ⛔ stop any further slicing immediately
+        // ----- Bomb path: trigger immediate Game Over after a short delay -----
+        if (isBomb)
+        {
+            Blade.LockSlicing(); // stop further slicing immediately
 
-    AudioManager.Instance?.PlaySFX("bomb", false);
-    
-        if (splashEffect != null)
-            Instantiate(splashEffect, transform.position, Quaternion.identity);
+            AudioManager.Instance?.PlaySFX("bomb", false);
 
-    var col = GetComponent<Collider2D>(); if (col) col.enabled = false;
-    var sr  = GetComponent<SpriteRenderer>(); if (sr) sr.enabled = false;
+            if (splashEffect != null)
+                Instantiate(splashEffect, transform.position, Quaternion.identity);
 
-    StartCoroutine(DelayAndGameOver());
-    return;
-}
+            var col = GetComponent<Collider2D>(); if (col) col.enabled = false;
+            var sr  = GetComponent<SpriteRenderer>(); if (sr) sr.enabled = false;
+
+            StartCoroutine(DelayAndGameOver());
+            return;
+        }
 
         // ----- Normal fruit slice path -----
         if (slicedFruitPrefab != null)
@@ -92,14 +97,13 @@ public class Fruit : MonoBehaviour
 
     private System.Collections.IEnumerator DelayAndGameOver()
     {
-        // If you want to sync to the clip, use its length; else use a fallback
+        // Sync to bomb clip if available
         float delay = 1f;
         if (bombSound != null && bombSound.length > 0f)
             delay = Mathf.Clamp(bombSound.length * 0.9f, 0.2f, 2.5f);
 
         yield return new WaitForSecondsRealtime(delay);
         GameManager.instance?.GameOver();
-        // Clean up this fruit afterwards
         Destroy(gameObject);
     }
 
